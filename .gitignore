@@ -1,0 +1,69 @@
+# ----------------------
+# 1. Dependency Directories
+# ----------------------
+node_modules/
+jspm_packages/
+
+# ----------------------
+# 2. Environment Variables (CRITICAL)
+# ----------------------
+# Never push API keys or DB passwords to GitHub
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+*.pem
+
+# ----------------------
+# 3. Expo & React Native
+# ----------------------
+.expo/
+*.jks
+*.p12
+*.key
+*.mobileprovision
+
+# Expo web build output
+web-build/
+
+# Metro bundler cache
+metro-file-map-cache-*/
+
+# ----------------------
+# 4. Web Build Artifacts (React/Next.js/Vite)
+# ----------------------
+# If you are using standard React or Vite
+build/
+dist/
+
+# If you are using Next.js
+.next/
+out/
+next-env.d.ts
+
+# ----------------------
+# 5. Logs & Debugging
+# ----------------------
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# ----------------------
+# 6. IDE & OS Files
+# ----------------------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ----------------------
+# 7. Native Builds (Optional)
+# ----------------------
+# Even if you use Expo Go, keep these ignored in case you prebuild later
+android/
+ios/
+coverage/

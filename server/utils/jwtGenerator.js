@@ -1,0 +1,15 @@
+const jwt = require('jsonwebtoken');
+require('dotenv').config();
+
+function jwtGenerator(user_id, role) {
+  const payload = {
+    user: {
+      id: user_id,
+      role: role
+    }
+  };
+  // Token valid for 1 hour
+  return jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: "1h" });
+}
+
+module.exports = jwtGenerator;

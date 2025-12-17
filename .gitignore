@@ -15,8 +15,6 @@ jspm_packages/
 .env.production.local
 *.pem
 
-CRUX_API_KEY=AIzaSyCCSOx25vrb5z0tbedCB3_JRzzbVW6Uwgw
-
 # ----------------------
 # 3. Expo & React Native
 # ----------------------

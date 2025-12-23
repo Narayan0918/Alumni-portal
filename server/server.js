@@ -30,6 +30,7 @@ app.use("/api/v1/donations", require("./routes/donations"));
 app.use("/api/v1/events", require("./routes/events"));
 app.use("/api/v1/stories", require("./routes/stories"));
 app.use("/api/v1/chat", require("./routes/chat")); // Add Chat Route
+app.use("/api/v1/feed", require("./routes/feed"));
 
 // --- SOCKET.IO LOGIC ---
 // Store connected users: Map<UserID, SocketID>

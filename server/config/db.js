@@ -1,19 +1,25 @@
-const { Pool } = require('pg');
-require('dotenv').config();
+const Pool = require("pg").Pool;
+require("dotenv").config();
 
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-});
-
-pool.on('connect', () => {
-  console.log('✅ Connected to PostgreSQL Database');
-});
-
-pool.on('error', (err) => {
-  console.error('❌ Unexpected error on idle client', err);
-  process.exit(-1);
-});
-
-module.exports = {
-  query: (text, params) => pool.query(text, params),
+// PRO TIP: This config handles both Local and Cloud connections automatically
+const devConfig = {
+  user: process.env.PG_USER,
+  password: process.env.PG_PASSWORD,
+  host: process.env.PG_HOST,
+  port: process.env.PG_PORT,
+  database: process.env.PG_DATABASE,
 };
+
+// Render/Neon gives us a single long URL string called DATABASE_URL
+const proConfig = {
+  connectionString: process.env.DATABASE_URL, // <--- Render will provide this
+  ssl: {
+    rejectUnauthorized: false, // Required for Neon/AWS
+  },
+};
+
+const pool = new Pool(
+  process.env.NODE_ENV === "production" ? proConfig : devConfig
+);
+
+module.exports = pool;

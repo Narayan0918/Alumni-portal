@@ -20,45 +20,6 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import HomeFeed from "./pages/HomeFeed";
 
-// Navbar Component
-// const Navbar = () => (
-//   <nav className="bg-blue-900 p-4 text-white shadow-md">
-//     <div className="container mx-auto flex justify-between items-center">
-//       <Link
-//         to="/dashboard"
-//         className="font-bold text-xl flex items-center gap-2"
-//       >
-//         🎓 Alumni Platform
-//       </Link>
-//       <div className="space-x-6">
-//         <Link to="/jobs" className="hover:text-yellow-300 transition">
-//           Jobs
-//         </Link>{" "}
-//         {/* ADD THIS */}
-//         <Link to="/directory" className="hover:text-yellow-300 transition">
-//           Directory
-//         </Link>
-//         <Link to="/dashboard" className="hover:text-yellow-300 transition">
-//           My Profile
-//         </Link>
-//         <Link to="/chat">Messages</Link>
-//         <Link to="/events">Events</Link>
-//         <Link to="/stories">Stories</Link>
-//         <Link to="/donations">Donate</Link>
-//         <button
-//           onClick={() => {
-//             localStorage.removeItem("token"); // Destroy the key
-//             window.location.href = "/login"; // Redirect to login
-//           }}
-//           className="bg-red-500 px-3 py-1 rounded hover:bg-red-600 transition"
-//         >
-//           Logout
-//         </button>
-//       </div>
-//     </div>
-//   </nav>
-// );
-
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
 

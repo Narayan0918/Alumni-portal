@@ -16,10 +16,13 @@ const server = http.createServer(app);
 
 // Initialize Socket.IO
 const io = new Server(server, {
-    cors: {
-        origin: "http://localhost:5173", // Your Frontend URL
-        methods: ["GET", "POST"]
-    }
+  cors: {
+    origin: [
+      "http://localhost:5173",
+      "https://alumni-portal-nu-wheat.vercel.app/",
+    ], // Your Frontend URL
+    methods: ["GET", "POST"],
+  },
 });
 
 // Routes
@@ -38,51 +41,51 @@ app.use("/api/v1/institutions", require("./routes/institutions"));
 const onlineUsers = new Map();
 
 io.on("connection", (socket) => {
-    // 1. User Connects
-    console.log(`User Connected: ${socket.id}`);
+  // 1. User Connects
+  console.log(`User Connected: ${socket.id}`);
 
-    // Listen for "join" event from frontend to map UserID -> SocketID
-    socket.on("join_chat", (userId) => {
-        onlineUsers.set(userId, socket.id);
-        console.log(`Mapped User ${userId} to ${socket.id}`);
-        // Notify everyone who is online (optional)
-        io.emit("online_users", Array.from(onlineUsers.keys()));
-    });
+  // Listen for "join" event from frontend to map UserID -> SocketID
+  socket.on("join_chat", (userId) => {
+    onlineUsers.set(userId, socket.id);
+    console.log(`Mapped User ${userId} to ${socket.id}`);
+    // Notify everyone who is online (optional)
+    io.emit("online_users", Array.from(onlineUsers.keys()));
+  });
 
-    // 2. Sending a Message
-    socket.on("send_message", async (data) => {
-        const { sender_id, receiver_id, content } = data;
+  // 2. Sending a Message
+  socket.on("send_message", async (data) => {
+    const { sender_id, receiver_id, content } = data;
 
-        // A. Save to Database (Persistence)
-        try {
-            await pool.query(
-                "INSERT INTO messages (sender_id, receiver_id, content) VALUES ($1, $2, $3)",
-                [sender_id, receiver_id, content]
-            );
-        } catch (err) {
-            console.error("Error saving message:", err);
-        }
+    // A. Save to Database (Persistence)
+    try {
+      await pool.query(
+        "INSERT INTO messages (sender_id, receiver_id, content) VALUES ($1, $2, $3)",
+        [sender_id, receiver_id, content]
+      );
+    } catch (err) {
+      console.error("Error saving message:", err);
+    }
 
-        // B. Send to Receiver (Real-time)
-        const receiverSocketId = onlineUsers.get(receiver_id);
-        
-        if (receiverSocketId) {
-            // If user is online, push message instantly
-            io.to(receiverSocketId).emit("receive_message", data);
-        }
-    });
+    // B. Send to Receiver (Real-time)
+    const receiverSocketId = onlineUsers.get(receiver_id);
 
-    // 3. Disconnect
-    socket.on("disconnect", () => {
-        // Remove user from map
-        for (let [key, value] of onlineUsers.entries()) {
-            if (value === socket.id) {
-                onlineUsers.delete(key);
-                break;
-            }
-        }
-        console.log("User Disconnected", socket.id);
-    });
+    if (receiverSocketId) {
+      // If user is online, push message instantly
+      io.to(receiverSocketId).emit("receive_message", data);
+    }
+  });
+
+  // 3. Disconnect
+  socket.on("disconnect", () => {
+    // Remove user from map
+    for (let [key, value] of onlineUsers.entries()) {
+      if (value === socket.id) {
+        onlineUsers.delete(key);
+        break;
+      }
+    }
+    console.log("User Disconnected", socket.id);
+  });
 });
 
 const PORT = process.env.PORT || 5000;
